@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -24,7 +25,7 @@ class Customer
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=16, unique=true)
+     * @ORM\Column(type="string", length=50, unique=true)
      */
     private $uuid;
 
@@ -138,7 +139,7 @@ class Customer
     /**
      * @return mixed
      */
-    public function getDateOfBirth(): string
+    public function getDateOfBirth(): DateTime
     {
         return $this->dateOfBirth;
     }
@@ -147,7 +148,7 @@ class Customer
      * @param mixed $dateOfBirth
      * @return Customer
      */
-    public function setDateOfBirth(string $dateOfBirth): self
+    public function setDateOfBirth(DateTime $dateOfBirth): self
     {
         $this->dateOfBirth = $dateOfBirth;
 
@@ -164,9 +165,9 @@ class Customer
 
     /**
      * @param mixed $status
-     * @return string
+     * @return Customer
      */
-    public function setStatus(string $status): string
+    public function setStatus(string $status): self
     {
         $this->status = $status;
 
@@ -176,7 +177,7 @@ class Customer
     /**
      * @return mixed
      */
-    public function getCreatedAt(): string
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
@@ -185,7 +186,7 @@ class Customer
      * @param mixed $createdAt
      * @return Customer
      */
-    public function setCreatedAt(string $createdAt): self
+    public function setCreatedAt(DateTime  $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -195,7 +196,7 @@ class Customer
     /**
      * @return mixed
      */
-    public function getUpdatedAt(): ?string
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
@@ -204,7 +205,7 @@ class Customer
      * @param mixed $updatedAt
      * @return Customer
      */
-    public function setUpdatedAt(string $updatedAt): self
+    public function setUpdatedAt(DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 

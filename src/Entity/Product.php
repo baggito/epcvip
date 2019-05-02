@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
@@ -21,7 +22,7 @@ class Product
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=10, unique=true)
+     * @ORM\Column(type="string", length=50, unique=true)
      */
     private $issn;
 
@@ -121,7 +122,7 @@ class Product
     /**
      * @return mixed
      */
-    public function getCreatedAt(): string
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
@@ -130,7 +131,7 @@ class Product
      * @param mixed $createdAt
      * @return Product
      */
-    public function setCreatedAt(string $createdAt): self
+    public function setCreatedAt(DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -140,7 +141,7 @@ class Product
     /**
      * @return mixed
      */
-    public function getUpdatedAt(): ?string
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
@@ -149,7 +150,7 @@ class Product
      * @param mixed $updatedAt
      * @return Product
      */
-    public function setUpdatedAt(string $updatedAt): self
+    public function setUpdatedAt(DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 

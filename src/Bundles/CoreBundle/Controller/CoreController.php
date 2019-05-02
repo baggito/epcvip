@@ -7,9 +7,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CoreController extends AbstractController
 {
-    /**
-     * @Route("core", name="core_bundle_index")
-     */
     public function index()
     {
         // TODO
