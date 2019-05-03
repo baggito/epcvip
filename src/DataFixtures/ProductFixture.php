@@ -4,15 +4,10 @@ namespace App\DataFixtures;
 
 use App\Entity\Customer;
 use App\Entity\Product;
-use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
 class ProductFixture extends BaseFixture
 {
-    private static $product_statuses = [
-        'new', 'pending', 'in review', 'approved', 'inactive', 'deleted'
-    ];
-
     protected function loadData(ObjectManager $manager)
     {
         $this->createMany(Product::class, 30, function (Product $product, $count) {
@@ -21,7 +16,7 @@ class ProductFixture extends BaseFixture
             // Initialize product name with fake name
             $product->setName($this->faker->name);
             // Initialize product status with fake status form predefined values
-            $product->setStatus($this->faker->randomElement(self::$product_statuses));
+            $product->setStatus($this->faker->randomElement(Product::$product_statuses));
             // Initialize product createdAt with fake date from last 100 days
             $product->setCreatedAt($this->faker->dateTimeBetween('-100 days', '-1 days'));
 

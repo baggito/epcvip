@@ -5,7 +5,10 @@ namespace App\Entity;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\NonUniqueResultException;
+use Exception;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 
@@ -16,6 +19,10 @@ use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 class Customer
 {
     use SoftDeleteableEntity;
+
+    public static $customer_statuses = [
+        'new', 'pending', 'in review', 'approved', 'inactive', 'deleted'
+    ];
 
     /**
      * @ORM\Id()
@@ -110,7 +117,7 @@ class Customer
      * @param mixed $firstName
      * @return Customer
      */
-    public function setFirstName(string $firstName): self
+    public function setFirstName(?string $firstName): self
     {
         $this->firstName = $firstName;
 
@@ -150,7 +157,16 @@ class Customer
      */
     public function setDateOfBirth(DateTime $dateOfBirth): self
     {
-        $this->dateOfBirth = $dateOfBirth;
+        if ($dateOfBirth instanceof DateTime) {
+            $this->dateOfBirth = $dateOfBirth;
+        } else {
+            try {
+                $date = new DateTime($dateOfBirth);
+            } catch (Exception $e) {
+                $date = date('Y-m-d H:i:s');
+            }
+            $this->dateOfBirth = $date;
+        }
 
         return $this;
     }
@@ -158,7 +174,7 @@ class Customer
     /**
      * @return mixed
      */
-    public function getStatus(): string
+    public function getStatus(): ?string
     {
         return $this->status;
     }
@@ -167,9 +183,13 @@ class Customer
      * @param mixed $status
      * @return Customer
      */
-    public function setStatus(string $status): self
+    public function setStatus(?string $status): self
     {
-        $this->status = $status;
+        if (! $status) {
+            $this->status = 'new';
+        } else {
+            $this->status = $status;
+        }
 
         return $this;
     }
@@ -220,6 +240,12 @@ class Customer
         return $this->products;
     }
 
+    /**
+     * Add product to customer
+     *
+     * @param Product $product
+     * @return Customer
+     */
     public function addProduct(Product $product): self
     {
         if (!$this->products->contains($product)) {
@@ -230,6 +256,12 @@ class Customer
         return $this;
     }
 
+    /**
+     * Remove product from customer
+     *
+     * @param Product $product
+     * @return Customer
+     */
     public function removeProduct(Product $product): self
     {
         if ($this->products->contains($product)) {
@@ -241,5 +273,45 @@ class Customer
         }
 
         return $this;
+    }
+
+    /**
+     * Returns the list of all not deleted customers
+     *
+     * @param EntityManagerInterface $em
+     * @return array
+     */
+    public static function notDeletedCustomers(EntityManagerInterface $em): array
+    {
+        return $em->createQueryBuilder()
+            ->select('c')
+            ->from('\App\Entity\Customer', 'c')
+            ->where("c.deletedAt IS NULL")
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Returns not deleted customer by id
+     *
+     * @param EntityManagerInterface $em
+     * @param int $id
+     * @return Customer|null
+     */
+    public static function notDeletedCustomerById(EntityManagerInterface $em, int $id): ?Customer
+    {
+        try {
+            $data = $em->createQueryBuilder()
+                ->select('c')
+                ->from('\App\Entity\Customer', 'c')
+                ->where("c.id = $id")
+                ->andWhere("c.deletedAt IS NULL")
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            $data = null;
+        }
+
+        return $data;
     }
 }

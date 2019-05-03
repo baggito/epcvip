@@ -126,8 +126,14 @@
     "gedmo/doctrine-extensions": {
         "version": "v2.4.37"
     },
+    "hipaway-travel/mandrill-bundle": {
+        "version": "v1.1"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
+    },
+    "mandrill/mandrill": {
+        "version": "1.0.55"
     },
     "monolog/monolog": {
         "version": "1.24.0"
@@ -161,6 +167,9 @@
     },
     "psr/simple-cache": {
         "version": "1.0.1"
+    },
+    "ramsey/uuid": {
+        "version": "3.8.0"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",

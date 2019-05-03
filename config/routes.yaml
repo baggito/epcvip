@@ -1,4 +1,0 @@
-index:
-    path: /customer
-    controller: App\Controller\CustomerController::create
-    methods:   [GET]

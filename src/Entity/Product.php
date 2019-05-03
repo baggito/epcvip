@@ -3,7 +3,9 @@
 namespace App\Entity;
 
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\NonUniqueResultException;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 
@@ -13,6 +15,10 @@ use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 class Product
 {
     use SoftDeleteableEntity;
+
+    public static $product_statuses = [
+        'new', 'pending', 'in review', 'approved', 'inactive', 'deleted'
+    ];
 
     /**
      * @ORM\Id()
@@ -52,10 +58,9 @@ class Product
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Customer", inversedBy="products")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $customer;
-
 
     public function getId(): ?int
     {
@@ -103,7 +108,7 @@ class Product
     /**
      * @return mixed
      */
-    public function getStatus(): string
+    public function getStatus(): ?string
     {
         return $this->status;
     }
@@ -160,7 +165,7 @@ class Product
     /**
      * @return Customer
      */
-    public function getCustomer(): Customer
+    public function getCustomer(): ?Customer
     {
         return $this->customer;
     }
@@ -169,10 +174,66 @@ class Product
      * @param Customer
      * @return Product
      */
-    public function setCustomer(Customer $customer): self
+    public function setCustomer(?Customer $customer): self
     {
         $this->customer = $customer;
 
         return $this;
     }
+
+    /**
+     * @param EntityManagerInterface $em
+     * @return array
+     */
+    public static function notDeletedProducts(EntityManagerInterface $em): array
+    {
+        return $em->createQueryBuilder()
+            ->select('p')
+            ->from('\App\Entity\Product', 'p')
+            ->where("p.deletedAt IS NULL")
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @param EntityManagerInterface $em
+     * @param int $id
+     * @return Product|null
+     */
+    public static function notDeletedProductById(EntityManagerInterface $em, int $id): ?Product
+    {
+        try {
+            $data = $em->createQueryBuilder()
+                ->select('p')
+                ->from('\App\Entity\Product', 'p')
+                ->where("p.id = $id")
+                ->andWhere("p.deletedAt IS NULL")
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            $data = null;
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param EntityManagerInterface $em
+     * @param $data_ago
+     * @return mixed
+     */
+    public static function getPendingProducts(EntityManagerInterface $em, $data_ago): ?array
+    {
+        // List of products created less than $data_ago weeks ago
+        return $em->createQueryBuilder()
+            ->select('p')
+            ->from('\App\Entity\Product', 'p')
+            ->where("p.status = 'pending'")
+            ->andWhere("p.createdAt < '$data_ago'")
+            ->andWhere("p.deletedAt IS NULL")
+            ->orderBy('p.createdAt', 'asc')
+            ->getQuery()
+            ->getResult();
+    }
+
 }

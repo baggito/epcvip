@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Products{% endblock %}
+
+{% block body %}
+    <table style="width:50%">
+        <tr>
+            <th>Customer ID</th>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Created At</th>
+        </tr>
+        {% for product in products %}
+        <tr>
+            <td>{{ product.id }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.status }}</td>
+            <td>{{ product.createdAt|date("Y-m-d H:i:s") }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

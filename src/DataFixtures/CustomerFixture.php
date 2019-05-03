@@ -8,10 +8,6 @@ use PhpParser\Node\Expr\Cast\Object_;
 
 class CustomerFixture extends BaseFixture
 {
-    private static $customer_statuses = [
-        'new', 'pending', 'in review', 'approved', 'inactive', 'deleted'
-    ];
-
     // Count of fake records
     private $fixture_count = 10;
 
@@ -35,7 +31,7 @@ class CustomerFixture extends BaseFixture
             // Initialize dateOfBirth with fake date
             $customer->setDateOfBirth($this->faker->dateTimeBetween('-100 years', '-1 years'));
             // Initialize customer status with fake status form predefined values
-            $customer->setStatus($this->faker->randomElement(self::$customer_statuses));
+            $customer->setStatus($this->faker->randomElement(Customer::$customer_statuses));
             // Initialize customer createdAt with fake date from last 100 days
             $customer->setCreatedAt($this->faker->dateTimeBetween('-100 days', '-1 days'));
 
