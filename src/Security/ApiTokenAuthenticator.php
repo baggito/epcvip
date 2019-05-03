@@ -23,6 +23,11 @@ class ApiTokenAuthenticator extends AbstractGuardAuthenticator
 
     public function supports(Request $request)
     {
+        // Don't validate auth token for login endpoint
+        if($request->getPathInfo() === '/api/login') {
+            return false;
+        }
+
         // Check all incoming requests
         return true;
     }

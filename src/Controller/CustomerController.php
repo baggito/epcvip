@@ -27,7 +27,7 @@ class CustomerController extends BaseController
      * @param EntityManagerInterface $em
      * @return JsonResponse
      *
-     * @Route("/customers", methods={"GET"}, name="customers_index")
+     * @Route("/api/customers", methods={"GET"}, name="customers_index")
      */
     public function index(EntityManagerInterface $em)
     {
@@ -157,7 +157,7 @@ class CustomerController extends BaseController
      * @param ValidatorInterface $validator
      * @return JsonResponse
      *
-     * @Route("/customers", methods={"POST"}, name="customers_create")
+     * @Route("/api/customers", methods={"POST"}, name="customers_create")
      */
     public function create(EntityManagerInterface $em, Request $request, ValidatorInterface $validator)
     {
@@ -192,7 +192,7 @@ class CustomerController extends BaseController
      * @param EntityManagerInterface $em
      * @return JsonResponse
      *
-     * @Route("/customers/{id}", methods={"GET"}, name="customers_read")
+     * @Route("/api/customers/{id}", methods={"GET"}, name="customers_read")
      */
     public function read(int $id, EntityManagerInterface $em)
     {
@@ -216,7 +216,7 @@ class CustomerController extends BaseController
      * @param ValidatorInterface $validator
      * @return JsonResponse
      *
-     * @Route("/customers/{id}", methods={"POST"}, name="customers_update")
+     * @Route("/api/customers/{id}", methods={"POST"}, name="customers_update")
      */
     public function update(int $id, EntityManagerInterface $em, Request $request, ValidatorInterface $validator)
     {
@@ -257,7 +257,7 @@ class CustomerController extends BaseController
      * @return JsonResponse
      *
      * @throws Exception
-     * @Route("/customers/{id}", methods={"DELETE"}, name="customer_delete")
+     * @Route("/api/customers/{id}", methods={"DELETE"}, name="customer_delete")
      */
     public function delete(int $id, EntityManagerInterface $em)
     {
@@ -292,7 +292,7 @@ class CustomerController extends BaseController
      * @param EntityManagerInterface $em
      * @return JsonResponse
      *
-     * @Route("/customers/{id}/product/{product_id}", methods={"POST"}, name="customers_attach_product")
+     * @Route("/api/customers/{id}/product/{product_id}", methods={"POST"}, name="customers_attach_product")
      */
     public function attachProduct(int $id, int $product_id, EntityManagerInterface $em)
     {
@@ -331,7 +331,7 @@ class CustomerController extends BaseController
      * @param EntityManagerInterface $em
      * @return JsonResponse
      *
-     * @Route("/customers/{id}/product/{product_id}", methods={"DELETE"}, name="customers_detach_product")
+     * @Route("/api/customers/{id}/product/{product_id}", methods={"DELETE"}, name="customers_detach_product")
      */
     public function detachProduct(int $id, int $product_id, EntityManagerInterface $em)
     {

@@ -67,7 +67,7 @@ class AuthController extends AbstractController
 
             return new JsonResponse([
                 'status'     => true,
-                'auth_token' => $user->getApiToken()->getToken()
+                'auth_token' => 'Bearer '. $user->getApiToken()->getToken()
             ], Response::HTTP_OK);
 
         } else {
