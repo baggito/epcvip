@@ -15,11 +15,13 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-#        main:
-#            anonymous: true
-#            guard:
-#                authenticators:
-#                    - App\Security\LoginFormAuthenticator
+        main:
+            anonymous: true
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+                    - App\Security\ApiTokenAuthenticator
+                entry_point: App\Security\ApiTokenAuthenticator
 
             # activate different ways to authenticate
 

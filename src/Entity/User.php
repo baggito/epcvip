@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -37,6 +39,11 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $firstName;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\ApiToken", mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $apiToken;
 
     public function getId(): ?int
     {
@@ -124,6 +131,23 @@ class User implements UserInterface
     public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getApiToken(): ?ApiToken
+    {
+        return $this->apiToken;
+    }
+
+    public function setApiToken(ApiToken $apiToken): self
+    {
+        $this->apiToken = $apiToken;
+
+        // set the owning side of the relation if necessary
+        if ($this !== $apiToken->getUser()) {
+            $apiToken->setUser($this);
+        }
 
         return $this;
     }
